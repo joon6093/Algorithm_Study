@@ -2,14 +2,15 @@ import sys
 from bisect import bisect_left
 input=sys.stdin.readline
 
-A = int(input())
-arr = list(map(int, input().split()))
-dp_table = [arr[0]]
+N=int(input())
+L=list(map(int,input().split()))
+dp_table=[-float('inf')]
 
-for i in range(1,len(arr)):
-    if dp_table[-1] < arr[i]:
-        dp_table.append(arr[i])
+for i in L:
+    if dp_table[-1]<i:
+        dp_table.append(i)
     else:
-        dp_table[bisect_left(dp_table, arr[i])] = arr[i]
+        dp_table[bisect_left(dp_table, i)] = i
 
-print(len(dp_table))
+
+print(len(dp_table)-1)
