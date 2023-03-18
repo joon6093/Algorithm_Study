@@ -2,11 +2,9 @@ import sys
 input = sys.stdin.readline
 
 def dfs(node):
-    global count
     visited[node] = 1
     for i in graph[node]:
         if not visited[i]:
-            count +=1
             dfs(i)
 
 N = int(input())
@@ -24,4 +22,4 @@ for i in graph:
 
 visited = [0] * (N + 1)
 dfs(1)
-print(count)
+print(sum(visited)-1)
