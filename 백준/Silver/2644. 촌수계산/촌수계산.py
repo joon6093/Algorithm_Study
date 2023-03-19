@@ -1,5 +1,4 @@
 import sys
-from collections import defaultdict
 input = sys.stdin.readline
 
 people = int(input())
@@ -7,7 +6,7 @@ search_x, search_y = map(int,input().split())
 index = int(input())
 relationship = [list(map(int, input().split())) for _ in range(index)]
 
-graph=defaultdict(list)
+graph = [[] for _ in range(people + 1)]
 visited = [False] * (people + 1) 
 for x,y in relationship:
     graph[x].append(y)
