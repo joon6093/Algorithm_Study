@@ -1,6 +1,5 @@
 import sys
 from collections import deque
-import copy
 input = sys.stdin.readline
 
 
@@ -11,7 +10,7 @@ def bfs(puzzle):
         puzzle=queue.popleft()
         if puzzle == "123456780":
             return visited["123456780"]
-        pos = puzzle.index('0')
+        pos = puzzle.index('0') 
         row=pos//3
         col=pos%3
         for x,y in move:
