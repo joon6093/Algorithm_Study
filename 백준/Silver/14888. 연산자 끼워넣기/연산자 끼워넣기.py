@@ -5,8 +5,8 @@ index = int(input())
 num = list(map(int, input().split()))
 add_index,sub_index,mul_index,div_index=map(int, input().split())
 
-max = -1e9
-min= 1e9
+max = float("-inf")   
+min= float("inf")  
 def dfs(depth,song):
     global max, min, add_index, sub_index, mul_index, div_index
     if(index==depth):
