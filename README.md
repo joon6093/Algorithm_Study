@@ -1,4 +1,4 @@
-# Baekjoon_Algorithm-python
+# 백준 문제 풀이
 ### ID
 https://solved.ac/profile/joon2721
 ### VLOG
