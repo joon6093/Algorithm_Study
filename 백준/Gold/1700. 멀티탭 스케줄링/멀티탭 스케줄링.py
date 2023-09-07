@@ -4,8 +4,6 @@ plug_index,use_index  = map(int,sys.stdin.readline().strip().split())
 infor = list(map(int, sys.stdin.readline().strip().split()))
 
 plug=[]
-max_check=0
-plug_check=0
 song=0
 for index,name in enumerate(infor):
     if(name in plug):
@@ -13,6 +11,8 @@ for index,name in enumerate(infor):
     elif(len(plug)<plug_index):
         plug.append(name)
     else:
+        max_check=0
+        plug_check=0
         append_check=0
         for plug_index,plug_name in enumerate(plug):
             try:
