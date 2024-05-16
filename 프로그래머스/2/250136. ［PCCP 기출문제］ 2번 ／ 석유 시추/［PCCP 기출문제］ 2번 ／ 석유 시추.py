@@ -19,12 +19,11 @@ def solution(land):
 def bfs(y, x, visited, row, col, land, song):
     queue = deque([(y, x)])
     visited[y][x] = 1
-    amount = 0
+    amount = 1
     x_visited = set([x])
 
     while queue:
         new_y, new_x = queue.popleft()
-        amount += 1
 
         for i in range(4):
             move_y = new_y + dy[i]
@@ -34,6 +33,7 @@ def bfs(y, x, visited, row, col, land, song):
                 queue.append((move_y, move_x))
                 x_visited.add(move_x)
                 visited[move_y][move_x] = 1
+                amount += 1
                 
     for i in x_visited:
         song[i] += amount
