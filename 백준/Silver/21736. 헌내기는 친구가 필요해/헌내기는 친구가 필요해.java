@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,31 +10,35 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String[] input = br.readLine().split(" ");
         int N = Integer.parseInt(input[0]);
         int M = Integer.parseInt(input[1]);
 
-        String[][] board = new String[N][M];
-        int Ix = 0;
-        int Iy = 0;
+        char[][] board = new char[N][M];
+        int Ix = 0, Iy = 0;
+
         for (int i = 0; i < N; i++) {
-            String[] line = br.readLine().split("");
+            String line = br.readLine();
             for (int j = 0; j < M; j++) {
-                board[i][j] = line[j];
-                if (line[j].equals("I")) {
+                char c = line.charAt(j);
+                board[i][j] = c;
+                if (c == 'I') {
                     Ix = i;
                     Iy = j;
                 }
             }
         }
-        int count = 0;
 
+        int count = 0;
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        int[][] visited = new int[N][M];
-        visited[Ix][Iy] = 1;
+        boolean[][] visited = new boolean[N][M];
+
+        visited[Ix][Iy] = true;
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{Ix, Iy});
+
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
             int x = current[0];
@@ -43,20 +49,25 @@ public class Main {
                 int ny = y + dir[1];
 
                 if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                    if (visited[nx][ny] == 0 && !board[nx][ny].equals("X")) {
-                        visited[nx][ny] = 1;
+                    if (!visited[nx][ny] && board[nx][ny] != 'X') {
+                        visited[nx][ny] = true;
                         queue.add(new int[]{nx, ny});
-                        if (board[nx][ny].equals("P")) {
+                        if (board[nx][ny] == 'P') {
                             count++;
                         }
                     }
                 }
             }
         }
+
         if (count == 0) {
-            System.out.println("TT");
+            bw.write("TT\n");
         } else {
-            System.out.println(count);
+            bw.write(count + "\n");
         }
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
