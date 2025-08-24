@@ -1,69 +1,79 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 
+    private static final int[] dr = new int[]{-1, 1, 0, 0};
+    private static final int[] dc = new int[]{0, 0, -1, 1};
+    private static Character[][] mapView;
+
+    private static boolean[][] visited;
+
+
+    private static int[] start;
+    private static int N;
+    private static int M;
+    private static int count;
+
+
     public static void main(String[] args) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
 
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int N = Integer.parseInt(st.nextToken());
-            int M = Integer.parseInt(st.nextToken());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        mapView = new Character[N][M];
+        visited = new boolean[N][M];
 
-            char[][] board = new char[N][M];
-            int Ix = 0, Iy = 0;
+        for (int r = 0; r < N; r++) {
+            final String row = br.readLine();
+            for (int c = 0; c < M; c++) {
+                final char el = row.charAt(c);
+                mapView[r][c] = el;
+                if (el == 'I') {
+                    start = new int[]{r, c};
 
-            for (int i = 0; i < N; i++) {
-                String line = br.readLine();
-                for (int j = 0; j < M; j++) {
-                    char c = line.charAt(j);
-                    board[i][j] = c;
-                    if (c == 'I') {
-                        Ix = i;
-                        Iy = j;
-                    }
+
                 }
             }
+        }
+        solve();
+        if (count == 0) {
+            System.out.println("TT");
+            return;
 
-            int count = 0;
-            int[] dx = {-1, 1, 0, 0};
-            int[] dy = {0, 0, -1, 1};
-            boolean[][] visited = new boolean[N][M];
 
-            visited[Ix][Iy] = true;
-            Queue<int[]> queue = new ArrayDeque<>();
-            queue.add(new int[]{Ix, Iy});
+        }
+        System.out.println(count);
+    }
 
-            while (!queue.isEmpty()) {
-                int[] current = queue.poll();
-                int x = current[0];
-                int y = current[1];
-
-                for (int d = 0; d < 4; d++) {
-                    int nx = x + dx[d];
-                    int ny = y + dy[d];
-
-                    if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                        if (!visited[nx][ny] && board[nx][ny] != 'X') {
-                            visited[nx][ny] = true;
-                            queue.add(new int[]{nx, ny});
-                            if (board[nx][ny] == 'P') {
-                                count++;
-                            }
-                        }
-                    }
+    private static void solve() {
+        Queue<int[]> queue = new ArrayDeque();
+        queue.offer(new int[]{start[0], start[1]});
+        while (!queue.isEmpty()) {
+            final int[] cur = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                final int nR = cur[0] + dr[i];
+                final int nC = cur[1] + dc[i];
+                if (!(nR >= 0 && nR <= N - 1 && nC >= 0 && nC <= M - 1)) {
+                    continue;
                 }
+                if (visited[nR][nC]) {
+                    continue;
+                }
+                if (mapView[nR][nC] == 'X') {
+                    continue;
+                }
+                if (mapView[nR][nC] == 'P') {
+                    count++;
+                }
+                visited[nR][nC] = true;
+                queue.offer(new int[]{nR, nC});
             }
-
-            bw.write(count == 0 ? "TT\n" : count + "\n");
-            bw.flush();
         }
     }
 }
