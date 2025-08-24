@@ -3,71 +3,67 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
 
-        String[] input = br.readLine().split(" ");
-        int N = Integer.parseInt(input[0]);
-        int M = Integer.parseInt(input[1]);
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int N = Integer.parseInt(st.nextToken());
+            int M = Integer.parseInt(st.nextToken());
 
-        char[][] board = new char[N][M];
-        int Ix = 0, Iy = 0;
+            char[][] board = new char[N][M];
+            int Ix = 0, Iy = 0;
 
-        for (int i = 0; i < N; i++) {
-            String line = br.readLine();
-            for (int j = 0; j < M; j++) {
-                char c = line.charAt(j);
-                board[i][j] = c;
-                if (c == 'I') {
-                    Ix = i;
-                    Iy = j;
+            for (int i = 0; i < N; i++) {
+                String line = br.readLine();
+                for (int j = 0; j < M; j++) {
+                    char c = line.charAt(j);
+                    board[i][j] = c;
+                    if (c == 'I') {
+                        Ix = i;
+                        Iy = j;
+                    }
                 }
             }
-        }
 
-        int count = 0;
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        boolean[][] visited = new boolean[N][M];
+            int count = 0;
+            int[] dx = {-1, 1, 0, 0};
+            int[] dy = {0, 0, -1, 1};
+            boolean[][] visited = new boolean[N][M];
 
-        visited[Ix][Iy] = true;
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{Ix, Iy});
+            visited[Ix][Iy] = true;
+            Queue<int[]> queue = new ArrayDeque<>();
+            queue.add(new int[]{Ix, Iy});
 
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int x = current[0];
-            int y = current[1];
+            while (!queue.isEmpty()) {
+                int[] current = queue.poll();
+                int x = current[0];
+                int y = current[1];
 
-            for (int[] dir : directions) {
-                int nx = x + dir[0];
-                int ny = y + dir[1];
+                for (int d = 0; d < 4; d++) {
+                    int nx = x + dx[d];
+                    int ny = y + dy[d];
 
-                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                    if (!visited[nx][ny] && board[nx][ny] != 'X') {
-                        visited[nx][ny] = true;
-                        queue.add(new int[]{nx, ny});
-                        if (board[nx][ny] == 'P') {
-                            count++;
+                    if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
+                        if (!visited[nx][ny] && board[nx][ny] != 'X') {
+                            visited[nx][ny] = true;
+                            queue.add(new int[]{nx, ny});
+                            if (board[nx][ny] == 'P') {
+                                count++;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (count == 0) {
-            bw.write("TT\n");
-        } else {
-            bw.write(count + "\n");
+            bw.write(count == 0 ? "TT\n" : count + "\n");
+            bw.flush();
         }
-
-        bw.flush();
-        bw.close();
-        br.close();
     }
 }
